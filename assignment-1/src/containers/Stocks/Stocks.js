@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import StocksTable from '../../components/StocksTable/StocksTable';
 
 const Stocks = (props) => {
   return (
-    <h1>Stocks page</h1>
+    <Fragment>
+      <h1>Stocks page</h1>
+      <StocksTable />
+    </Fragment>
   )
-}
+};
 
 export default Stocks;

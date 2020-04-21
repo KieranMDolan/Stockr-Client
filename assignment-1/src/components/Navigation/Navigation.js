@@ -5,11 +5,11 @@ import styles from './Navigation.module.css';
 
 const Navigation = () => {
   return (
-    <Navbar expand="lg">
+    <Navbar expand="lg" bg="primary" variant="dark">
       <Navbar.Brand href="/">Stockr</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="ml-auto">
+      <Navbar.Collapse id="responsive-navbar-nav">
+        <Nav className="mr-auto">
           <Nav.Item><Nav.Link href="/">Home</Nav.Link></Nav.Item>
           <Nav.Item><Nav.Link href="/stocks">Stocks</Nav.Link></Nav.Item>
           <Nav.Item><Nav.Link href="/quote">Quote</Nav.Link></Nav.Item>
