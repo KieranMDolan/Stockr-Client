@@ -1,0 +1,48 @@
+import React, { useState } from 'react';
+
+// state should have a string that can be used for industry searches in the API
+const StocksFilter = (props) => {
+  // industry query string
+  const [selection, setSelection] = useState('');
+  // true if no selections have occurred
+  const [cleared, setCleared] = useState('true');
+
+  function handleSelection(event) {
+    setSelection(event.target.value);
+    console.log(selection);
+  }
+
+  // list of industries designed to keep up to date with API if new industries entered
+  // in future
+  function getIndustries() {
+    let industryArray = [];
+    props.rowData.forEach((row) => {
+      if (!industryArray.includes(row.industry)) {
+        industryArray.push(row.industry);
+      }
+    })
+    return industryArray;
+  }
+
+  let industryArray = getIndustries();
+  console.log(industryArray);
+
+  return (
+    <form onSubmit={handleSelection}>
+      <label>
+        Filter by Industry
+        <input type="radio" name="industry" value="consumer" />
+        <label htmlFor="consumer" />
+        Consumer
+        <label />
+        <input type="radio" name="industry" value="financials" />
+        <label for="financials" />
+        Financials
+        <label />
+        <button type="submit">Apply Filters</button>
+      </label>
+    </form>
+  );
+};
+
+export default StocksFilter;

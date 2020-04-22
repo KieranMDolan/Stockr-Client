@@ -19,7 +19,8 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/stocks" component={Stocks} />
+          <Route exact path="/stocks/symbols" component={Stocks} />
+          <Route path="/stocks/" component={Home} />
           <Route path="/quote" component={Quote} />
           <Route path="/history" component={PriceHistory} />
           <Route component={NoMatch} />
