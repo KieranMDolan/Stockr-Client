@@ -4,7 +4,6 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import NameRenderer from './Renderers/NameRenderer';
 import StocksFilter from './StocksFilter/StocksFilter';
-import Stocks from '../../containers/Stocks/Stocks';
 
 const StocksTable = (props) => {
   // Define the column properties
@@ -43,7 +42,7 @@ const StocksTable = (props) => {
     setDefaultRowData();
   }, []);
 
-  // fetch all stocks and set to
+  // fetch all stocks and set state
   function setDefaultRowData() {
     fetch('http://131.181.190.87:3000/stocks/symbols')
       .then((response) => {

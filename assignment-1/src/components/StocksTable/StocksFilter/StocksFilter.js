@@ -20,25 +20,30 @@ const StocksFilter = (props) => {
       if (!industryArray.includes(row.industry)) {
         industryArray.push(row.industry);
       }
-    })
+    });
     return industryArray;
   }
-
+  // store industries in an array
   let industryArray = getIndustries();
+
+  // DEBUG
   console.log(industryArray);
+
+  let radioButtons = industryArray.map((industry) => {
+    let labelStr = industry.charAt(0).toUpperCase() + industry.slice(1);
+    return (
+      <div>
+        <input type="radio" name="industry" value={industry} />
+        <label htmlFor={industry}>{labelStr}</label>
+      </div>
+    );
+  });
 
   return (
     <form onSubmit={handleSelection}>
       <label>
         Filter by Industry
-        <input type="radio" name="industry" value="consumer" />
-        <label htmlFor="consumer" />
-        Consumer
-        <label />
-        <input type="radio" name="industry" value="financials" />
-        <label for="financials" />
-        Financials
-        <label />
+        {radioButtons}
         <button type="submit">Apply Filters</button>
       </label>
     </form>
