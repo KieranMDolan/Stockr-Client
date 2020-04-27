@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import Card from 'react-bootstrap/Card';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 const StockCard = (props) => {
   const [stock, setStock] = useState();
@@ -23,19 +25,26 @@ const StockCard = (props) => {
       });
   }
 
+  // if loading empty variable, else card with stock details
   let stockInfo = loading
     ? null
-    : [
-        <h3>{stock.timestamp}</h3>,
-        <h3>{stock.symbol}</h3>,
-        <h3>{stock.name}</h3>,
-        <h3>{stock.industry}</h3>,
-        <h3>{stock.open}</h3>,
-        <h3>{stock.high}</h3>,
-        <h3>{stock.low}</h3>,
-        <h3>{stock.close}</h3>,
-        <h3>{stock.volume}</h3>,
-      ];
+    : 
+       <Card>
+         <Card.Header>
+           <Card.Title>{stock.name} - {stock.symbol}</Card.Title>
+         </Card.Header>
+         <ListGroup className="list-group-flush">
+           <ListGroup.Item>Date: {stock.timestamp}</ListGroup.Item>
+           <ListGroup.Item>Open: {stock.open}</ListGroup.Item>
+           <ListGroup.Item>Close: {stock.close}</ListGroup.Item>
+           <ListGroup.Item>High: {stock.high}</ListGroup.Item>
+           <ListGroup.Item>Low: {stock.low}</ListGroup.Item>
+           <ListGroup.Item>Volume: {stock.volume}</ListGroup.Item>
+           <ListGroup.Item>Industry: {stock.industry}</ListGroup.Item>
+         </ListGroup>
+       </Card> 
+      ;
+
   return (
     <div>
       {stockInfo}
