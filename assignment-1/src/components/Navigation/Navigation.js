@@ -11,7 +11,7 @@ const Navigation = () => {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
           <Nav.Item><Nav.Link href="/">Home</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link href="/stocks">Stocks</Nav.Link></Nav.Item>
+          <Nav.Item><Nav.Link href="/stocks/symbols">Stocks</Nav.Link></Nav.Item>
           <Nav.Item><Nav.Link href="/quote">Quote</Nav.Link></Nav.Item>
           <Nav.Item><Nav.Link href="/history">Price History</Nav.Link></Nav.Item>
         </Nav>
