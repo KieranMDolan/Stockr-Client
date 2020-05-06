@@ -34,12 +34,12 @@ const StockCard = (props) => {
            <Card.Title>{stock.name} - {stock.symbol}</Card.Title>
          </Card.Header>
          <ListGroup className="list-group-flush">
-           <ListGroup.Item>Date: {stock.timestamp}</ListGroup.Item>
+           <ListGroup.Item>Date: {stock.timestamp.slice(0, 10)}</ListGroup.Item>
            <ListGroup.Item>Open: {stock.open}</ListGroup.Item>
            <ListGroup.Item>Close: {stock.close}</ListGroup.Item>
            <ListGroup.Item>High: {stock.high}</ListGroup.Item>
            <ListGroup.Item>Low: {stock.low}</ListGroup.Item>
-           <ListGroup.Item>Volume: {stock.volume}</ListGroup.Item>
+           <ListGroup.Item>Volume: {stock.volumes}</ListGroup.Item>
            <ListGroup.Item>Industry: {stock.industry}</ListGroup.Item>
          </ListGroup>
        </Card> 
