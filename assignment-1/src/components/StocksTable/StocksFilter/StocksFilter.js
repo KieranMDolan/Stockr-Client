@@ -1,52 +1,91 @@
 import React, { useState } from 'react';
+import Form from 'react-bootstrap/Form';
 
 // state should have a string that can be used for industry searches in the API
 const StocksFilter = (props) => {
-  // industry query string
-  const [selection, setSelection] = useState('');
   // true if no selections have occurred
-  const [cleared, setCleared] = useState('true');
+  const [cleared, setCleared] = useState(true);
+  // determines if industry filters should show
+  const [filterExpanded, setFilterExpanded] = useState(false);
+  //
+  const [keywordValue, setKeywordValue] =useState('');
 
   function handleSelection(event) {
-    setSelection(event.target.value);
-    console.log(selection);
+    if (event.target.value === 'None') {
+      props.setSelection('');
+    } else {
+      props.setSelection(event.target.value);
+    }
+    props.setFiltered(false);
+    setKeywordValue('');
   }
 
-  // list of industries designed to keep up to date with API if new industries entered
-  // in future
-  function getIndustries() {
-    let industryArray = [];
-    props.rowData.forEach((row) => {
-      if (!industryArray.includes(row.industry)) {
-        industryArray.push(row.industry);
-      }
+  function handleKeywordSearch(event) {
+    setKeywordValue(event.target.value);
+    filterByKeyword(event.target.value);
+    if (event.target.value !== "") {
+      props.setFiltered(true);
+    } else {
+      props.setFiltered(false);
+    }
+  }
+
+  // filter rowData according to a keyword
+  function filterByKeyword(keyword) {
+    let filteredData = props.rowData.filter((row) => {
+      return (
+        row.name.includes(keyword) ||
+        row.symbol.includes(keyword) ||
+        row.industry.includes(keyword)
+      )
     });
-    return industryArray;
+    props.setFilteredRowData([...filteredData])
   }
-  // store industries in an array
-  let industryArray = getIndustries();
 
-  // DEBUG
-  console.log(industryArray);
+  // store industries in an array
+  const industryArray = [
+    'None',
+    'Health Care',
+    'Industrials',
+    'Consumer Discretionary',
+    'Information Technology',
+    'Consumer Staples',
+    'Utilities',
+    'Financials',
+    'Real Estate',
+    'Materials',
+    'Energy',
+    'Telecommunication Services',
+  ];
 
   let radioButtons = industryArray.map((industry) => {
     let labelStr = industry.charAt(0).toUpperCase() + industry.slice(1);
+
     return (
-      <div>
-        <input type="radio" name="industry" value={industry} />
-        <label htmlFor={industry}>{labelStr}</label>
-      </div>
+      <Form.Check
+        type="radio"
+        name="industry-radios"
+        id={industry}
+        value={industry}
+        key={industry}
+        label={labelStr}
+        onChange={handleSelection}
+      />
     );
   });
 
   return (
-    <form onSubmit={handleSelection}>
-      <label>
+    <div>
+    <Form>
+      <Form.Label onClick={() => setFilterExpanded(!filterExpanded)}>
         Filter by Industry
-        {radioButtons}
-        <button type="submit">Apply Filters</button>
-      </label>
-    </form>
+      </Form.Label>
+      {filterExpanded ? radioButtons : null}
+    </Form>
+    <Form>
+      <Form.Control value={keywordValue} type="text" onChange={handleKeywordSearch}/>
+    </Form>
+    </div>
   );
 };
 

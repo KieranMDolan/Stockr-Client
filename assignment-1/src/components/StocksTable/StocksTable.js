@@ -6,6 +6,9 @@ import NameRenderer from './Renderers/NameRenderer';
 import StocksFilter from './StocksFilter/StocksFilter';
 
 const StocksTable = (props) => {
+  //
+  const [industry, setIndustry] = useState('');
+
   // Define the column properties
   const [columnDefs] = useState([
     {
@@ -31,6 +34,9 @@ const StocksTable = (props) => {
 
   // initialise the state hooks for the table's row data
   const [rowData, setRowData] = useState([]);
+  // state hooks to store filtered data
+  const [filteredRowData, setFilteredRowData] = useState([]);
+  const [filtered, setFiltered] = useState(false);
 
   // set the framework components for cell rendering
   const frameworkComponents = {
@@ -58,6 +64,11 @@ const StocksTable = (props) => {
 
   // fetch stocks with a certain industry
   function setIndustryRowData(industryString) {
+    if (industryString === '') {
+      setDefaultRowData();
+      return;
+    }
+
     fetch(
       'http://131.181.190.87:3000/stocks/symbols?industry=' + industryString
     )
@@ -70,23 +81,31 @@ const StocksTable = (props) => {
       .catch((error) => {
         console.log('Error: ', error);
       });
+    
+      console.log(rowData);
   }
 
   return (
     <Fragment>
       <div>
-        <StocksFilter rowData={rowData}/>
+        <StocksFilter
+          rowData={rowData}
+          setRowData={setRowData}
+          filteredRowData={filteredRowData}
+          setFilteredRowData={setFilteredRowData}
+          filtered={filtered}
+          setFiltered={setFiltered}
+          selection={industry}
+          setSelection={setIndustryRowData}
+        />
       </div>
       <div
         className="ag-theme-balham"
         style={{ height: '500px', width: '600px' }}
       >
-        <button onClick={() => setIndustryRowData('Information Technology')}>
-          Information Technology Industry Only
-        </button>
         <AgGridReact
           columnDefs={columnDefs}
-          rowData={rowData}
+          rowData={filtered ? filteredRowData : rowData}
           frameworkComponents={frameworkComponents}
         ></AgGridReact>
       </div>
