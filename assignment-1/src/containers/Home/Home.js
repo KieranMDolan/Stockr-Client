@@ -1,8 +1,10 @@
 import React from 'react';
+import Landing from '../../components/Landing/Landing';
 
 const Home = (props) => {
   return (
-    <h1>Home page</h1>
+    <Landing  />
+
   )
 }
 

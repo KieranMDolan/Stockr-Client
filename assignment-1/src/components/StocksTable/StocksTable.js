@@ -4,9 +4,9 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import NameRenderer from './Renderers/NameRenderer';
 import StocksFilter from './StocksFilter/StocksFilter';
+import ErrorMessage from '../UI/ErrorMessage/ErrorMessage';
 
 const StocksTable = (props) => {
-  //
   const [industry, setIndustry] = useState('');
 
   // Define the column properties
@@ -34,6 +34,7 @@ const StocksTable = (props) => {
 
   // initialise the state hooks for the table's row data
   const [rowData, setRowData] = useState([]);
+
   // state hooks to store filtered data
   const [filteredRowData, setFilteredRowData] = useState([]);
   const [filtered, setFiltered] = useState(false);
@@ -57,8 +58,8 @@ const StocksTable = (props) => {
       .then((data) => {
         setRowData(data);
       })
-      .catch((error) => {
-        console.log('Error: ', error);
+      .catch((innerError) => {
+        console.log(innerError);
       });
   }
 
@@ -72,18 +73,32 @@ const StocksTable = (props) => {
     fetch(
       'http://131.181.190.87:3000/stocks/symbols?industry=' + industryString
     )
-      .then((response) => {
-        return response.json();
+      .then((res) => {
+        return res.json();
       })
       .then((data) => {
         setRowData(data);
       })
       .catch((error) => {
-        console.log('Error: ', error);
+        console.log('Error: ' + error);
       });
-    
-      console.log(rowData);
+
+    console.log(rowData);
   }
+
+  let table = [
+    <div
+      className="ag-theme-balham"
+      style={{ height: '500px', width: '600px' }}
+      key="tableDiv"
+    >
+      <AgGridReact
+        columnDefs={columnDefs}
+        rowData={filtered ? filteredRowData : rowData}
+        frameworkComponents={frameworkComponents}
+      ></AgGridReact>
+    </div>,
+  ];
 
   return (
     <Fragment>
@@ -99,16 +114,7 @@ const StocksTable = (props) => {
           setSelection={setIndustryRowData}
         />
       </div>
-      <div
-        className="ag-theme-balham"
-        style={{ height: '500px', width: '600px' }}
-      >
-        <AgGridReact
-          columnDefs={columnDefs}
-          rowData={filtered ? filteredRowData : rowData}
-          frameworkComponents={frameworkComponents}
-        ></AgGridReact>
-      </div>
+      {table}
     </Fragment>
   );
 };

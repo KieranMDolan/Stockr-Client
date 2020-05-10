@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import styles from './Navigation.module.css';
 import Login from './Login/Login';
 
-const Navigation = () => {
+const Navigation = (props) => {
   return (
     <Navbar expand="lg" bg="dark" variant="dark">
       <Navbar.Brand href="/">Stockr</Navbar.Brand>
@@ -12,10 +12,9 @@ const Navigation = () => {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
           <Nav.Item><Nav.Link href="/stocks/symbols">Stocks</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link href="/quote">Quote</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link href="/history">History</Nav.Link></Nav.Item>
+          <Nav.Item><Nav.Link href="/history/A">History</Nav.Link></Nav.Item>
         </Nav>
-      <Login />
+      <Login {...props}/>
       </Navbar.Collapse>
     </Navbar>
   )

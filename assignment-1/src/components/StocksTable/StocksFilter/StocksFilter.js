@@ -78,7 +78,7 @@ const StocksFilter = (props) => {
     <div>
     <Form>
       <Form.Label onClick={() => setFilterExpanded(!filterExpanded)}>
-        Filter by Industry
+        Filter by Industry{filterExpanded ? '-' : '+'}
       </Form.Label>
       {filterExpanded ? radioButtons : null}
     </Form>

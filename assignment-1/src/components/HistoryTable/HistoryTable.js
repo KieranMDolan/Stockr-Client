@@ -2,17 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import HistoryChart from '../HistoryChart/HistoryChart';
+import HistoryChart from './HistoryChart/HistoryChart';
 import TimestampRenderer from './Renderers/TimestampRenderer';
+import ErrorMessage from '../UI/ErrorMessage/ErrorMessage';
+import Card from 'react-bootstrap/Card';
+import Nav from 'react-bootstrap/Nav';
+import styles from './HistoryTable.module.css';
+import HistoryFilter from './HistoryFilter/HistoryFilter';
 
 const API_URL = 'http://131.181.190.87:3000';
 const DATE_START = '2019-11-06';
 const DATE_END = '2020-03-24';
-let SYMBOL = 'AAL';
 
 const HistoryTable = (props) => {
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [dates, setDates] = useState({ from: DATE_START, to: DATE_END });
+  const [tab, setTab] = useState('Table');
 
   // Define the column properties
   const [columnDefs] = useState([
@@ -58,7 +64,7 @@ const HistoryTable = (props) => {
       field: 'volumes',
       sortable: true,
       filter: true,
-      width: 100,
+      width: 99,
     },
   ]);
 
@@ -71,15 +77,17 @@ const HistoryTable = (props) => {
   const [rowData, setRowData] = useState([]);
 
   useEffect(() => {
-    getPriceHistory(SYMBOL);
+    getPriceHistory(props.symbol);
   }, []);
 
   useEffect(() => {
-    getPriceHistory(SYMBOL);
+    getPriceHistory(props.symbol);
   }, [dates]);
 
   const handleErrors = (response) => {
     if (response.error) {
+      setError(true);
+      setErrorMessage(response.message);
       throw Error(response.message);
     } else {
       return response;
@@ -87,8 +95,6 @@ const HistoryTable = (props) => {
   };
 
   const getPriceHistory = (symbol) => {
-    // const url = `${API_URL}/stocks/authed/${symbol}?from=2020-03-15T00%3A00%3A00.000Z&to=2020-03-20T00%3A00%3A00.000Z`;
-    // const url = `${API_URL}/stocks/authed/${symbol}?from=${dates.from}${PARSE_TIME_STRING}&to=${dates.to}${PARSE_TIME_STRING}`;
     const url = `${API_URL}/stocks/authed/${symbol}?from=${dates.from}&to=${dates.to}`;
     console.log(url);
     const token = localStorage.getItem('token');
@@ -101,11 +107,11 @@ const HistoryTable = (props) => {
       .then((res) => res.json())
       .then(handleErrors)
       .then((res) => {
+        setError(false);
         setRowData(res);
       })
       .catch((err) => {
         console.log(err);
-        setError(true);
       });
   };
 
@@ -122,41 +128,68 @@ const HistoryTable = (props) => {
     }
   };
 
-  return (
+  const tabJSX = (
     <div>
-      <form>
-        <label htmlFor="from">From:</label>
-        <input
-          type="date"
-          name="from"
-          min="2019-11-06"
-          max={dates.to}
-          onChange={handleChange}
-          value={dates.from}
-        />
-        <label htmlFor="to">To:</label>
-        <input
-          type="date"
-          name="to"
-          min={dates.from}
-          max="2020-03-24"
-          onChange={handleChange}
-          value={dates.to}
-        />
-      </form>
-      <div
-        className="ag-theme-balham"
-        style={{ height: '500px', width: '500px' }}
-      >
-        {error ? null : (
+      {tab === 'Table' ? (
+        <div
+          className={"ag-theme-balham " + styles.table}
+        >
           <AgGridReact
             columnDefs={columnDefs}
             rowData={rowData}
             frameworkComponents={frameworkComponents}
           ></AgGridReact>
-        )}
-      </div>
-      <HistoryChart rawData={rowData} />
+        </div>
+      ) : null}
+      {tab === 'Chart' ? <HistoryChart rawData={rowData} /> : null}
+    </div>
+  );
+
+  const handleClick = (tabName) => {
+    switch (tabName) {
+      case 'Table':
+        setTab(tabName);
+        break;
+      case 'Chart':
+        setTab(tabName);
+        break;
+      default:
+        break;
+    }
+  };
+
+  return (
+    <div>
+      <Card>
+        <Card.Header>
+          <Nav variant="tabs" defaultActiveKey="#first">
+            <Nav.Item>
+              <Nav.Link
+                href="#first"
+                onClick={() => {
+                  handleClick('Table');
+                }}
+              >
+                Table
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                href="#link"
+                onClick={() => {
+                  handleClick('Chart');
+                }}
+              >
+                Chart
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Card.Header>
+        <Card.Body>
+          <HistoryFilter symbol={props.symbol} dates={dates} handleChange={handleChange} />
+          {tabJSX}
+        </Card.Body>
+      </Card>
     </div>
   );
 };
