@@ -6,7 +6,6 @@ import AppImg from '../../assets/trading-app.jpg';
 
 import styles from './Landing.module.css';
 
-let imgClasses = 'd-block w-80 h-50';
 const Landing = (props) => {
   return (
     <Carousel className={styles.carousel}>

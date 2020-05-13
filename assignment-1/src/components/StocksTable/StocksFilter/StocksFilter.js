@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
+import styles from './StocksFilter.module.css';
 
-// state should have a string that can be used for industry searches in the API
+
 const StocksFilter = (props) => {
-  // true if no selections have occurred
-  const [cleared, setCleared] = useState(true);
-  // determines if industry filters should show
+  // state variables to store/set if industry filters should show
   const [filterExpanded, setFilterExpanded] = useState(false);
-  //
-  const [keywordValue, setKeywordValue] =useState('');
+  // state variables to store/set the keyword search term
+  const [keywordValue, setKeywordValue] = useState('');
 
   function handleSelection(event) {
     if (event.target.value === 'None') {
@@ -23,7 +23,7 @@ const StocksFilter = (props) => {
   function handleKeywordSearch(event) {
     setKeywordValue(event.target.value);
     filterByKeyword(event.target.value);
-    if (event.target.value !== "") {
+    if (event.target.value !== '') {
       props.setFiltered(true);
     } else {
       props.setFiltered(false);
@@ -37,9 +37,9 @@ const StocksFilter = (props) => {
         row.name.includes(keyword) ||
         row.symbol.includes(keyword) ||
         row.industry.includes(keyword)
-      )
+      );
     });
-    props.setFilteredRowData([...filteredData])
+    props.setFilteredRowData([...filteredData]);
   }
 
   // store industries in an array
@@ -76,15 +76,27 @@ const StocksFilter = (props) => {
 
   return (
     <div>
-    <Form>
-      <Form.Label onClick={() => setFilterExpanded(!filterExpanded)}>
-        Filter by Industry{filterExpanded ? '-' : '+'}
-      </Form.Label>
-      {filterExpanded ? radioButtons : null}
-    </Form>
-    <Form>
-      <Form.Control value={keywordValue} type="text" onChange={handleKeywordSearch}/>
-    </Form>
+      <Container>
+        <Form className={styles.radioFilter}>
+          <Form.Label onClick={() => setFilterExpanded(!filterExpanded)}>
+            Filter by Industry{filterExpanded ? '-' : '+'}
+          </Form.Label>
+          {filterExpanded ? radioButtons : null}
+        </Form>
+      </Container>
+      <Container>
+        <Form>
+          <Form.Group>
+            <Form.Label htmlFor="keyword">Search by Keyword</Form.Label>
+            <Form.Control
+              value={keywordValue}
+              name="keyword"
+              type="text"
+              onChange={handleKeywordSearch}
+            />
+          </Form.Group>
+        </Form>
+      </Container>
     </div>
   );
 };

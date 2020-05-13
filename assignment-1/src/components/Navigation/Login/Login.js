@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { useHistory } from 'react-router-dom';
 
 const API_URL = 'http://131.181.190.87:3000';
+const MILLISECONDS_TO_SECONDS = 1000;
 
 const Login = (props) => {
   const [userEmail, setUserEmail] = useState('');
@@ -12,10 +13,17 @@ const Login = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('token') !== null) {
       setLoggedIn(true);
     }
+    if (localStorage.getItem('expireTime') !== null) {
+      let nowDate = Date.now();
+      if (nowDate >= localStorage.getItem('expireTime')) {
+        logout();
+      }
+    }
   }, []);
+
   const handleChange = (event) => {
     switch (event.target.name) {
       case 'email':
@@ -42,6 +50,11 @@ const Login = (props) => {
     }
   };
 
+  const getExpireDate = (tokenExpire) => {
+    let myDate = Date.now() + tokenExpire * MILLISECONDS_TO_SECONDS;
+    return myDate;
+  }
+
   const login = () => {
     const url = `${API_URL}/user/login`;
 
@@ -56,6 +69,7 @@ const Login = (props) => {
       .then((res) => res.json())
       .then(handleErrors)
       .then((res) => {
+        localStorage.setItem('expireTime', getExpireDate(res.expires_in));
         setLoggedIn(true);
         localStorage.setItem('token', res.token);
         window.location.reload();
@@ -65,6 +79,7 @@ const Login = (props) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('expireTime');
     setLoggedIn(false);
     window.location.reload();
   };

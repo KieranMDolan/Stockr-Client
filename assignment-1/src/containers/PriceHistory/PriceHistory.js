@@ -7,8 +7,8 @@ const PriceHistory = ({ match }) => {
   return (
     <Container fluid>
       <Jumbotron>
-        <h1>Price History</h1>
-        <p>Select a stock for tabulated stock data and charting</p>
+        <h1>Price History: {match.params.symbol}</h1>
+        <p>Tabulated historical stock data and charting</p>
       </Jumbotron>
       <HistoryTable symbol={match.params.symbol} />
     </Container>

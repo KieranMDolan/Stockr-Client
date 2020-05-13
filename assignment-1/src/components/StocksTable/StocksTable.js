@@ -4,11 +4,10 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import NameRenderer from './Renderers/NameRenderer';
 import StocksFilter from './StocksFilter/StocksFilter';
-import ErrorMessage from '../UI/ErrorMessage/ErrorMessage';
+import Card from 'react-bootstrap/Card';
+import styles from './StocksTable.module.css';
 
 const StocksTable = (props) => {
-  const [industry, setIndustry] = useState('');
-
   // Define the column properties
   const [columnDefs] = useState([
     {
@@ -82,14 +81,11 @@ const StocksTable = (props) => {
       .catch((error) => {
         console.log('Error: ' + error);
       });
-
-    console.log(rowData);
   }
 
   let table = [
     <div
-      className="ag-theme-balham"
-      style={{ height: '500px', width: '600px' }}
+      className={"ag-theme-balham " + styles.gridTable}
       key="tableDiv"
     >
       <AgGridReact
@@ -102,7 +98,8 @@ const StocksTable = (props) => {
 
   return (
     <Fragment>
-      <div>
+      <Card>
+        <Card.Body>
         <StocksFilter
           rowData={rowData}
           setRowData={setRowData}
@@ -110,11 +107,11 @@ const StocksTable = (props) => {
           setFilteredRowData={setFilteredRowData}
           filtered={filtered}
           setFiltered={setFiltered}
-          selection={industry}
           setSelection={setIndustryRowData}
         />
-      </div>
       {table}
+        </Card.Body>
+      </Card>
     </Fragment>
   );
 };

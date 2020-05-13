@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation.js';
 
@@ -10,11 +10,10 @@ import Layout from './components/Layout/Layout';
 import SingleStock from './containers/SingleStock/SingleStock.js';
 import Registration from './containers/Registration/Registration.js';
 
-import './App.css';
-
 function App() {
   // state for login error modal
   const [loginError, setLoginError] = useState({isError: false, errorMessage: ''});
+  
   const rootDivStyle = {
     height: '100%',
     width: '100%'

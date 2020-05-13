@@ -1,7 +1,6 @@
 import React from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import styles from './Navigation.module.css';
 import Login from './Login/Login';
 
 const Navigation = (props) => {

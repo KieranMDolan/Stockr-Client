@@ -11,7 +11,7 @@ const ErrorMessage = props => {
     default:
       break;
   }
-  return (<h3 className={styles.largeError}>Error: {props.errorMessage}</h3>)
+  return (<h3 className={className}>Error: {props.errorMessage}</h3>)
 }
 
 export default ErrorMessage;

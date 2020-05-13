@@ -4,11 +4,12 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import HistoryChart from './HistoryChart/HistoryChart';
 import TimestampRenderer from './Renderers/TimestampRenderer';
-import ErrorMessage from '../UI/ErrorMessage/ErrorMessage';
 import Card from 'react-bootstrap/Card';
 import Nav from 'react-bootstrap/Nav';
 import styles from './HistoryTable.module.css';
 import HistoryFilter from './HistoryFilter/HistoryFilter';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 const API_URL = 'http://131.181.190.87:3000';
 const DATE_START = '2019-11-06';
@@ -78,16 +79,13 @@ const HistoryTable = (props) => {
 
   useEffect(() => {
     getPriceHistory(props.symbol);
-  }, []);
-
-  useEffect(() => {
-    getPriceHistory(props.symbol);
   }, [dates]);
 
   const handleErrors = (response) => {
     if (response.error) {
       setError(true);
       setErrorMessage(response.message);
+      setRowData([]);
       throw Error(response.message);
     } else {
       return response;
@@ -96,7 +94,6 @@ const HistoryTable = (props) => {
 
   const getPriceHistory = (symbol) => {
     const url = `${API_URL}/stocks/authed/${symbol}?from=${dates.from}&to=${dates.to}`;
-    console.log(url);
     const token = localStorage.getItem('token');
     const headers = {
       accept: 'application/json',
@@ -158,8 +155,22 @@ const HistoryTable = (props) => {
     }
   };
 
+  const handleClose = () => {
+    setError(false);
+  }
   return (
     <div>
+      <Modal show={error} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{errorMessage === "jwt malformed" ? "You must be logged in for that" : errorMessage}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Card>
         <Card.Header>
           <Nav variant="tabs" defaultActiveKey="#first">
