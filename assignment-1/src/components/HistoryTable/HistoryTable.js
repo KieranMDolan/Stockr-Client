@@ -15,13 +15,23 @@ const API_URL = 'http://131.181.190.87:3000';
 const DATE_START = '2019-11-06';
 const DATE_END = '2020-03-24';
 
+/**
+ * A component that encompasses the table, filter and charting functions within a single tabbed
+ * Boostrap card.
+ * @param {*} props
+ */
 const HistoryTable = (props) => {
+  // error state
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  // determines date range
   const [dates, setDates] = useState({ from: DATE_START, to: DATE_END });
+  // determines current 'tab' being displayed
   const [tab, setTab] = useState('Table');
+  // initialise the state hooks for the table's row data
+  const [rowData, setRowData] = useState([]);
 
-  // Define the column properties
+  // Define the column properties for the ag-grid table
   const [columnDefs] = useState([
     {
       headerName: 'Timestamp',
@@ -74,13 +84,17 @@ const HistoryTable = (props) => {
     timestampRenderer: TimestampRenderer,
   };
 
-  // initialise the state hooks for the table's row data
-  const [rowData, setRowData] = useState([]);
-
+  // get price history data from the API on componet mounting
   useEffect(() => {
     getPriceHistory(props.symbol);
   }, [dates]);
 
+  /**
+   * Handles errors in a fetch.then() method chain. If error encountered, clears rowData and stores
+   * error response in state variables.
+   * @param {*} response 
+   * @returns Error if error is encountered, response if not
+   */
   const handleErrors = (response) => {
     if (response.error) {
       setError(true);
@@ -92,6 +106,11 @@ const HistoryTable = (props) => {
     }
   };
 
+  /**
+   * Makes an API call to the stocks/authed/{symbol} endpoint and stores the data in the rowData
+   * variable
+   * @param {*} symbol 
+   */
   const getPriceHistory = (symbol) => {
     const url = `${API_URL}/stocks/authed/${symbol}?from=${dates.from}&to=${dates.to}`;
     const token = localStorage.getItem('token');
@@ -112,6 +131,10 @@ const HistoryTable = (props) => {
       });
   };
 
+  /**
+   * Handles changes to the to and from form inputs, binding their values to state.
+   * @param {*} event 
+   */
   const handleChange = (event) => {
     switch (event.target.name) {
       case 'from':
@@ -125,12 +148,11 @@ const HistoryTable = (props) => {
     }
   };
 
+  // variable that allow for conditional rendering of content depending upon which 'tab' is chosen
   const tabJSX = (
     <div>
       {tab === 'Table' ? (
-        <div
-          className={"ag-theme-balham " + styles.table}
-        >
+        <div className={'ag-theme-balham ' + styles.table}>
           <AgGridReact
             columnDefs={columnDefs}
             rowData={rowData}
@@ -142,6 +164,10 @@ const HistoryTable = (props) => {
     </div>
   );
 
+  /**
+   * Handles clicking on a tab, setting the tab state variable to the clicked tab
+   * @param {*} tabName 
+   */
   const handleClick = (tabName) => {
     switch (tabName) {
       case 'Table':
@@ -155,22 +181,32 @@ const HistoryTable = (props) => {
     }
   };
 
+  /**
+   * Handles close for error modal
+   */
   const handleClose = () => {
     setError(false);
-  }
+  };
+
   return (
     <div>
+      {/* Error Modal to show error messages to the user */}
       <Modal show={error} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Error</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{errorMessage === "jwt malformed" ? "You must be logged in for that" : errorMessage}</Modal.Body>
+        <Modal.Body>
+          {errorMessage === 'jwt malformed'
+            ? 'You must be logged in for that'
+            : errorMessage}
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>
       </Modal>
+      {/* Card containing the filter component and conditionally rendered chart or table component */}
       <Card>
         <Card.Header>
           <Nav variant="tabs" defaultActiveKey="#first">
@@ -197,7 +233,11 @@ const HistoryTable = (props) => {
           </Nav>
         </Card.Header>
         <Card.Body>
-          <HistoryFilter symbol={props.symbol} dates={dates} handleChange={handleChange} />
+          <HistoryFilter
+            symbol={props.symbol}
+            dates={dates}
+            handleChange={handleChange}
+          />
           {tabJSX}
         </Card.Body>
       </Card>

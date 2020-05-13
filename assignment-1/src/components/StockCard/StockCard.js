@@ -11,12 +11,18 @@ const StockCard = (props) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  // store history to use for redirecting
   const history = useHistory();
 
+  // fill stock state with API data on component mount
   useEffect(() => {
     setStockToSymbol();
   }, []);
 
+  /**
+   * handle errors helper for use in fetch method call.
+   * @param {*} response a json formatted response returned from a then() call in a fetch chain
+   */
   const handleErrors = (response) => {
     if (response.error) {
       setError(true);
@@ -27,6 +33,9 @@ const StockCard = (props) => {
     }
   };
 
+  /**
+   * Sets stocks state to data from the stocks/{symbol} API call
+   */
   function setStockToSymbol() {
     fetch('http://131.181.190.87:3000/stocks/' + props.symbol)
       .then((response) => {
@@ -43,6 +52,9 @@ const StockCard = (props) => {
       });
   }
 
+  /**
+   * Redirects to the history page for the current stock in state
+   */
   const routeChangeHistory = () => {
     let path = '/history/' + props.symbol;
     history.push(path);
@@ -75,6 +87,7 @@ const StockCard = (props) => {
   );
   return (
     <div>
+      {/* Show error message if error else show stock information */}
       {error ? <ErrorMessage errorMessage={errorMessage} /> : stockInfo}
     </div>
   );

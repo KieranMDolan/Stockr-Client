@@ -3,6 +3,10 @@ import StockCard from '../../components/StockCard/StockCard';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import styles from './SingleStock.module.css';
 
+/**
+ * The container component rendered at the stocks/{symbol} route
+ * @param {*} param0 the match values received from react-router
+ */
 const SingleStock = ( {match} ) => {
   return (
     <div>

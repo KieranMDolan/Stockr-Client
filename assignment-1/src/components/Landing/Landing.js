@@ -6,6 +6,11 @@ import AppImg from '../../assets/trading-app.jpg';
 
 import styles from './Landing.module.css';
 
+/**
+ * The landing component rendered within the home component. Displays a three item carousel on the
+ * page, each with an image, header level text and a subtext
+ * @param {*} props 
+ */
 const Landing = (props) => {
   return (
     <Carousel className={styles.carousel}>

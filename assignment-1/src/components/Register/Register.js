@@ -6,16 +6,26 @@ import Button from 'react-bootstrap/Button';
 
 const API_URL = 'http://131.181.190.87:3000';
 
+/**
+ * A registration component used for registering a user with the API
+ * @param {*} props 
+ */
 const Register = (props) => {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [error, setError] = useState({ isError: false, errorMessage: '' });
   const [registered, setRegistered] = useState(false);
 
+  /**
+   * Set registered to false on component mount
+   */
   useEffect(() => {
     setRegistered(false);
   }, []);
 
+  /**
+   * Posts a register request to the API and handles error state handling depending on outcome
+   */
   const registerUser = () => {
     const url = `${API_URL}/user/register`;
 
@@ -29,13 +39,17 @@ const Register = (props) => {
     })
       .then((res) => res.json())
       .then((res) => handleErrors(res))
-      .then((res) => {
+      .then(() => {
         setError({ isError: false, errorMessage: '' });
         setRegistered(true);
       })
       .catch((error) => console.log(error.message));
   };
 
+  /**
+   * Sets form state to value of form inputs
+   * @param {*} event 
+   */
   const handleChange = (event) => {
     let value = event.target.value;
 
@@ -51,6 +65,11 @@ const Register = (props) => {
     }
   };
 
+  /**
+   * Detects an error in a response in a fetch chain. If so, sets error state to reflect this and
+   * the error message and throws an error (using the error message). If not, returns the response.
+   * @param {*} response 
+   */
   const handleErrors = (response) => {
     if (response.error) {
       setError({ isError: true, errorMessage: response.message });
@@ -60,6 +79,8 @@ const Register = (props) => {
     }
   };
 
+  // Variable to conditionally render a success message or the registration form depending on
+  // whether a registration event has successfuly occured.
   let formJSX;
   if (registered) {
     formJSX = (

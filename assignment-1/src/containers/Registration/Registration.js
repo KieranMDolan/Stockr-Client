@@ -1,7 +1,10 @@
 import React from 'react';
 import Register from '../../components/Register/Register';
 
-const Registration = (props) => {
+/**
+ * The container component rendered at the Registration route.
+ */
+const Registration = () => {
   return <Register />
 };
 

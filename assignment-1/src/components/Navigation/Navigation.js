@@ -3,6 +3,10 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Login from './Login/Login';
 
+/**
+ * A collapsable navigation bar component containing a login component
+ * @param {*} props 
+ */
 const Navigation = (props) => {
   return (
     <Navbar expand="lg" bg="dark" variant="dark">

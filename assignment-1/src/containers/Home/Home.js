@@ -4,7 +4,10 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 import styles from './Home.module.css';
 
-const Home = (props) => {
+/**
+ * The component rendered on the base/index route of the page
+ */
+const Home = () => {
   return (
     <Container>
       <Jumbotron className={styles.jumbotron}>

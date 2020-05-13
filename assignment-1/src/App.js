@@ -10,13 +10,19 @@ import Layout from './components/Layout/Layout';
 import SingleStock from './containers/SingleStock/SingleStock.js';
 import Registration from './containers/Registration/Registration.js';
 
+/**
+ * The root App component for Stockr. Renders the Router component and switches for react router
+ * and the navigation component.
+ */
 function App() {
-  // state for login error modal
+  // state for login error modal stored here to be passed to the navigation bar for the login
+  // component and the layout to display error modals
   const [loginError, setLoginError] = useState({isError: false, errorMessage: ''});
-  
+
+  // basic styling to ensure 
   const rootDivStyle = {
-    height: '100%',
-    width: '100%'
+    minHeight: '100%',
+    minWidth: '100%'
   }
 
   return (

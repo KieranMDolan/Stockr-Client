@@ -2,6 +2,9 @@ import React, { Fragment } from 'react';
 import StocksTable from '../../components/StocksTable/StocksTable';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 
+/**
+ * The container component rendered at the stocks/symbols route
+ */
 const Stocks = (props) => {
   return (
     <Fragment>

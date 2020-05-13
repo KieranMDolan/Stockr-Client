@@ -3,6 +3,10 @@ import HistoryTable from '../../components/HistoryTable/HistoryTable';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 
+/**
+ * The container component for the Price History page
+ * @param {*} param0 passed to this component via react router
+ */
 const PriceHistory = ({ match }) => {
   return (
     <Container fluid>

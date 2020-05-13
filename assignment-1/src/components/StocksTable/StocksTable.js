@@ -7,6 +7,10 @@ import StocksFilter from './StocksFilter/StocksFilter';
 import Card from 'react-bootstrap/Card';
 import styles from './StocksTable.module.css';
 
+/**
+ * A component that displays a table with data populated by the API endpoint stocks/symbols
+ * @param {*} props
+ */
 const StocksTable = (props) => {
   // Define the column properties
   const [columnDefs] = useState([
@@ -48,7 +52,9 @@ const StocksTable = (props) => {
     setDefaultRowData();
   }, []);
 
-  // fetch all stocks and set state
+  /**
+   * Retrieve data from the stocks/symbols endpoint with no paramters
+   */
   function setDefaultRowData() {
     fetch('http://131.181.190.87:3000/stocks/symbols')
       .then((response) => {
@@ -62,7 +68,10 @@ const StocksTable = (props) => {
       });
   }
 
-  // fetch stocks with a certain industry
+  /**
+   * Fetch stocks data from stocks/symbols endpoint using an industry parameter
+   * @param {string} industryString the parameter to be used in the API call
+   */
   function setIndustryRowData(industryString) {
     if (industryString === '') {
       setDefaultRowData();
@@ -83,33 +92,26 @@ const StocksTable = (props) => {
       });
   }
 
-  let table = [
-    <div
-      className={"ag-theme-balham " + styles.gridTable}
-      key="tableDiv"
-    >
-      <AgGridReact
-        columnDefs={columnDefs}
-        rowData={filtered ? filteredRowData : rowData}
-        frameworkComponents={frameworkComponents}
-      ></AgGridReact>
-    </div>,
-  ];
-
   return (
     <Fragment>
       <Card>
         <Card.Body>
-        <StocksFilter
-          rowData={rowData}
-          setRowData={setRowData}
-          filteredRowData={filteredRowData}
-          setFilteredRowData={setFilteredRowData}
-          filtered={filtered}
-          setFiltered={setFiltered}
-          setSelection={setIndustryRowData}
-        />
-      {table}
+          <StocksFilter
+            rowData={rowData}
+            setRowData={setRowData}
+            filteredRowData={filteredRowData}
+            setFilteredRowData={setFilteredRowData}
+            filtered={filtered}
+            setFiltered={setFiltered}
+            setSelection={setIndustryRowData}
+          />
+          <div className={'ag-theme-balham ' + styles.gridTable} key="tableDiv">
+            <AgGridReact
+              columnDefs={columnDefs}
+              rowData={filtered ? filteredRowData : rowData}
+              frameworkComponents={frameworkComponents}
+            ></AgGridReact>
+          </div>
         </Card.Body>
       </Card>
     </Fragment>
